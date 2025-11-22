@@ -1,6 +1,7 @@
-package ifrs.products.models;
+package ifrs.products.entity;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 
@@ -9,6 +10,6 @@ public class Product extends PanacheEntity {
 
   @Column(nullable = false)
   public String name;
-  public String description;
+  
   public double price;
 }

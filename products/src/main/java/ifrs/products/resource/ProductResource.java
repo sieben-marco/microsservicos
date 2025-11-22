@@ -1,6 +1,6 @@
-package ifrs.products;
+package ifrs.products.resource;
 
-import ifrs.products.models.Product;
+import ifrs.products.entity.Product;
 
 import java.net.URI;
 import java.util.List;
@@ -66,7 +66,6 @@ public class ProductResource {
       throw new WebApplicationException("O nome do produto não pode ser nulo.", 422);
     }
     entity.name = updatedProduct.name;
-    entity.description = updatedProduct.description;
     entity.price = updatedProduct.price;
     return entity;
   }
