@@ -1,8 +1,8 @@
-package ifrs.checkout;
+package ifrs.orders;
 
 import io.quarkus.test.junit.QuarkusIntegrationTest;
 
 @QuarkusIntegrationTest
-class CheckoutResourceIT extends CheckoutResourceTest {
+class OrderResourceIT extends OrderResourceTest {
     // Execute the same tests but in packaged mode.
 }
