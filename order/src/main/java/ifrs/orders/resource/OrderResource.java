@@ -83,7 +83,6 @@ public class OrderResource {
 
   @PATCH
   @Path("/{id}/pay")
-  @Consumes(MediaType.TEXT_PLAIN)
   @Produces(MediaType.APPLICATION_JSON)
   @Transactional
   public Order pay(Long id) {
