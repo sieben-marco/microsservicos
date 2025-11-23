@@ -179,6 +179,6 @@ public class OrderResource {
     }
     orderEntity.total -= product.getPrice() * itemEntity.quantity;
     itemEntity.delete();
-    return Response.ok(orderEntity).build();
+    return Response.noContent().build();
   }
 }
