@@ -1,0 +1,17 @@
+{
+  "status": "ABERTO",
+  "items": [
+    {
+      "productId": 123,
+      "quantity": 3
+    },
+    {
+      "productId": 129,
+      "quantity": 2
+    },
+    {
+      "productId": 133,
+      "quantity": 1
+    }
+  ]
+}
