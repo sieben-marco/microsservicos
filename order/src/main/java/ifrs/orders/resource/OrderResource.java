@@ -60,7 +60,6 @@ public class OrderResource {
     if (newOrder.id != null) {
       throw new WebApplicationException("O ID deve ser nulo ao criar um pedido.", 422);
     }
-
     if (newOrder.items == null || newOrder.items.isEmpty()) {
       throw new WebApplicationException("O pedido deve conter ao menos um item.", 422);
     }
@@ -120,16 +119,15 @@ public class OrderResource {
     if (newItem.id != null) {
       throw new WebApplicationException("O ID deve ser null para adicionar um item ao pedido.", 422);
     }
-
     Order orderEntity = Order.findById(orderId);
     if (orderEntity == null) {
       throw new NotFoundException("Pedido não encontrado.");
     }
-
     Product product = _productClient.get(newItem.productId);
     if (product == null) {
       throw new NotFoundException("Produto não encontrado.");
     }
+
     orderEntity.items.add(newItem);
     orderEntity.total += product.getPrice() * newItem.quantity;
     newItem.persist();
@@ -149,7 +147,6 @@ public class OrderResource {
     if (itemEntity == null) {
       throw new NotFoundException("Item não encontrado.");
     }
-
     Order orderEntity = Order.findById(orderId);
     if (orderEntity == null) {
       throw new NotFoundException("Pedido não encontrado.");
@@ -158,6 +155,7 @@ public class OrderResource {
     if (product == null) {
       throw new NotFoundException("Produto não encontrado.");
     }
+
     orderEntity.total -= product.getPrice() * itemEntity.quantity;
     orderEntity.total += product.getPrice() * quantity;
     itemEntity.quantity = quantity;
