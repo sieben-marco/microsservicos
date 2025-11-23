@@ -107,4 +107,83 @@ public class OrderResource {
     }
     entity.delete();
   }
+
+  // ===============
+  // Itens
+  // ===============
+
+  @POST
+  @Path("/{orderId}/items")
+  @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
+  @Transactional
+  public Response addItem(Long orderId, Item newItem) {
+    if (newItem.id != null) {
+      throw new WebApplicationException("O ID deve ser null para adicionar um item ao pedido.", 422);
+    }
+
+    Order orderEntity = Order.findById(orderId);
+    if (orderEntity == null) {
+      throw new NotFoundException("Pedido não encontrado.");
+    }
+
+    Product product = _productClient.get(newItem.productId);
+    if (product == null) {
+      throw new NotFoundException("Produto não encontrado.");
+    }
+    orderEntity.items.add(newItem);
+    orderEntity.total += product.getPrice() * newItem.quantity;
+    Item.persist(newItem);
+    return Response.created(URI.create("/orders/" + orderId + "/items/" + newItem.id))
+        .entity(newItem)
+        .build();
+  }
+
+  @PATCH
+  @Path("/{orderId}/items/{itemId}/{quantity}")
+  @Transactional
+  public Response changeItemQuantity(Long orderId, Long itemId, int quantity) {
+    if (quantity < 1) {
+      throw new WebApplicationException("Deve ter no mínimo um item.", 422);
+    }
+    Item itemEntity = Item.findById(itemId);
+    if (itemEntity == null) {
+      throw new NotFoundException("Item não encontrado.");
+    }
+
+    Order orderEntity = Order.findById(orderId);
+    if (orderEntity == null) {
+      throw new NotFoundException("Pedido não encontrado.");
+    }
+    Product product = _productClient.get(itemEntity.productId);
+    if (product == null) {
+      throw new NotFoundException("Produto não encontrado.");
+    }
+    orderEntity.total -= product.getPrice() * itemEntity.quantity;
+    orderEntity.total += product.getPrice() * quantity;
+    itemEntity.quantity = quantity;
+    return Response.ok(orderEntity).build();
+  }
+
+  @DELETE
+  @Path("/{orderId}/items/{itemId}")
+  @Transactional
+  public Response removeItem(Long orderId, Long itemId) {
+    Item itemEntity = Item.findById(itemId);
+    if (itemEntity == null) {
+      throw new NotFoundException("Item não encontrado."); 
+    }
+    Order orderEntity = Order.findById(orderId);
+    if (orderEntity == null) {
+      throw new NotFoundException("Pedido não encontrado.");
+    }
+    Product product = _productClient.get(itemEntity.productId);
+    if (product == null) {
+      throw new NotFoundException("Produto não encontrado.");
+    }
+    orderEntity.total -= product.getPrice() * itemEntity.quantity;
+    orderEntity.items.remove(itemEntity);
+    itemEntity.delete();
+    return Response.ok(orderEntity).build();
+  }
 }
