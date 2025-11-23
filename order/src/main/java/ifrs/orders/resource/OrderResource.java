@@ -158,7 +158,7 @@ public class OrderResource {
     orderEntity.total -= product.getPrice() * itemEntity.quantity;
     orderEntity.total += product.getPrice() * quantity;
     itemEntity.quantity = quantity;
-    return Response.ok(orderEntity).build();
+    return Response.ok(itemEntity).build();
   }
 
   @DELETE
