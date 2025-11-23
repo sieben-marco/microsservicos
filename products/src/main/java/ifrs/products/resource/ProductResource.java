@@ -1,10 +1,9 @@
 package ifrs.products.resource;
 
-import ifrs.products.entity.Product;
-
 import java.net.URI;
 import java.util.List;
 
+import ifrs.products.model.Product;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
