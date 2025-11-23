@@ -66,8 +66,6 @@ public class OrderResource {
     }
 
     List<Product> products = _productClient.list();
-
-    newOrder.status = "ABERTO";
     newOrder.total = newOrder.items.stream()
         .mapToDouble(item -> {
           Product product = products.stream().
@@ -77,7 +75,8 @@ public class OrderResource {
           return product.getPrice() * item.quantity;
         })
         .sum();  
-    Order.persist(newOrder);
+    newOrder.status = "ABERTO";
+    newOrder.persist();
     return Response.created(URI.create("/orders/" + newOrder.id))
         .entity(newOrder)
         .build();
@@ -133,7 +132,7 @@ public class OrderResource {
     }
     orderEntity.items.add(newItem);
     orderEntity.total += product.getPrice() * newItem.quantity;
-    Item.persist(newItem);
+    newItem.persist();
     return Response.created(URI.create("/orders/" + orderId + "/items/" + newItem.id))
         .entity(newItem)
         .build();
@@ -182,7 +181,6 @@ public class OrderResource {
       throw new NotFoundException("Produto não encontrado.");
     }
     orderEntity.total -= product.getPrice() * itemEntity.quantity;
-    orderEntity.items.remove(itemEntity);
     itemEntity.delete();
     return Response.ok(orderEntity).build();
   }
