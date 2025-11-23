@@ -83,6 +83,20 @@ public class OrderResource {
         .build();
   }
 
+  @PATCH
+  @Path("/{id}/pay")
+  @Consumes(MediaType.TEXT_PLAIN)
+  @Produces(MediaType.APPLICATION_JSON)
+  @Transactional
+  public Order pay(Long id) {
+    Order entity = Order.findById(id);
+    if (entity == null) {
+      throw new NotFoundException();
+    }
+    entity.status = "PAGO";
+    return entity;
+  }
+
   @DELETE
   @Path("/{id}")
   @Transactional
