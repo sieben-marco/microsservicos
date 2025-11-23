@@ -18,7 +18,7 @@ public class Order extends PanacheEntity{
   public String status; // ABERTO, PAGO
   public Double total;
 
-  @OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
+  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
   @JoinColumn(name = "orderId")
   public List<Item> items = new ArrayList<>();
 }
