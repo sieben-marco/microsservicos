@@ -1,11 +1,16 @@
 package ifrs.orders.resource;
 
-import ifrs.orders.entity.Order;
+import ifrs.orders.client.ProductClient;
+import ifrs.orders.model.Item;
+import ifrs.orders.model.Order;
 import ifrs.orders.model.Product;
 
 import java.net.URI;
 import java.util.List;
 
+import org.eclipse.microprofile.rest.client.inject.RestClient;
+
+import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
@@ -21,6 +26,14 @@ import jakarta.ws.rs.core.Response;
 
 @Path("/orders")
 public class OrderResource {
+
+  @Inject
+  @RestClient
+  private ProductClient _productClient;
+
+  // ===============
+  // Pedidos
+  // ===============
 
   @GET
   @Produces(MediaType.APPLICATION_JSON)
