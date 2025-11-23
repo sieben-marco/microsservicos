@@ -17,7 +17,7 @@ import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
-@Path("/order")
+@Path("/orders")
 public class OrderResource {
 
   @GET
@@ -46,7 +46,7 @@ public class OrderResource {
       throw new WebApplicationException("O ID deve ser nulo ao criar um pedido.", 422);
     }
     Order.persist(newOrder);
-    return Response.created(URI.create("/order/" + newOrder.id))
+    return Response.created(URI.create("/orders/" + newOrder.id))
         .entity(newOrder)
         .build();
   }
