@@ -1,6 +1,7 @@
 package ifrs.orders.resource;
 
 import ifrs.orders.entity.Order;
+import ifrs.orders.model.Product;
 
 import java.net.URI;
 import java.util.List;
@@ -45,6 +46,23 @@ public class OrderResource {
     if (newOrder.id != null) {
       throw new WebApplicationException("O ID deve ser nulo ao criar um pedido.", 422);
     }
+
+    if (newOrder.items == null || newOrder.items.isEmpty()) {
+      throw new WebApplicationException("O pedido deve conter ao menos um item.", 422);
+    }
+
+    List<Product> products = _productClient.list();
+
+    newOrder.status = "ABERTO";
+    newOrder.total = newOrder.items.stream()
+        .mapToDouble(item -> {
+          Product product = products.stream().
+              filter(p -> p.getId().equals(item.productId))
+              .findFirst()
+              .orElseThrow(() -> new NotFoundException("Produto com ID " + item.productId + " não encontrado."));
+          return product.getPrice() * item.quantity;
+        })
+        .sum();  
     Order.persist(newOrder);
     return Response.created(URI.create("/orders/" + newOrder.id))
         .entity(newOrder)
