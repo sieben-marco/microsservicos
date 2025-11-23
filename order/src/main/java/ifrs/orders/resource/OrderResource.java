@@ -177,6 +177,12 @@ public class OrderResource {
     if (product == null) {
       throw new NotFoundException("Produto não encontrado.");
     }
+    
+    if (orderEntity.items.size() == 1) {
+      orderEntity.delete();
+      return Response.noContent().build();
+    }
+
     orderEntity.total -= product.getPrice() * itemEntity.quantity;
     itemEntity.delete();
     return Response.noContent().build();
